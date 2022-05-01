@@ -5,20 +5,29 @@ def what_was_that_one_with(those_actors)
     .select('movies.title, movies.id')
     .joins(:actors)
     .where(actors: {name: those_actors})
-    .group(:title)
+    .group('movies.id')
     .having('COUNT(actors.id) = ?', those_actors.length )
 end
 
 def golden_age
   # Find the decade with the highest average movie score.
-
+  
 end
 
 def costars(name)
   # List the names of the actors that the named actor has ever
   # appeared with.
   # Hint: use a subquery
+  another_query = Movies
+    .select(:id)
+    .joins(:actors)
+    .where(actors: { name: name })
 
+  Actor
+    .select(:name)
+    .joins(:movies)
+    .where(movies: { id: another_query })
+    # .where.not(actors: {name: name} )
 end
 
 def actor_out_of_work
